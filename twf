@@ -8,7 +8,9 @@
 
 use strict;
 
-my ($pid,$fid,$f,$m,@c,$l);
+my $rem=[];
+my $stk=[];
+my ($pid,$r,$match,$id,$fid,$f,$m,@c,$l,$nopush);
 my $ssn=0;
 print "digraph {\n";
 while (<>) {
@@ -20,20 +22,41 @@ while (<>) {
 	$fid++;
 	print qq(f$fid [shape=box height=.1 width=.1 "fixed-size"=true label=""];\n);
 	my $x=0;
+	my $find=0;
+#print join(" ","stack:",map($_->[0], @$stk)), "\n";;
+	if ($r=pop @$stk) {
+		($match,$id)=@$r;
+#print "Looking for $match $id\n";
+		$find=1;
+	}
 	for my $i ($f,$m,@c) {
+		$nopush=0;
 		$l=$i;
-		if ($i=~s/\.$//) {
+		if ($nopush or $i=~s/\.$//) {
 			$l=$i;
+			# leaf node: story ends here
+		} else {
+			# more info available
+			push @$rem, [$i, $ssn];
 		}
-		$pid=$ssn;
-		print qq{i$ssn [shape=box label="$l"];\n};
-		$ssn++;
+		if ($find and defined $match and $match eq $i) {
+			$pid=$id;
+			$find=0;
+		} else {
+			$pid=$ssn;
+			print qq{i$ssn [shape=box label="$l"];\n};
+			$ssn++;
+		}
 		if ($x++<2) {
 			#print "i$pid -> f$fid [arrowsize=0.0];\n";
 			print "i$pid -> f$fid;\n";
 		} else {
 			print "f$fid -> i$pid;\n";
 		}
+	}
+	die "couldn't find $match" if ($find);
+	while ($r=pop @$rem) {
+		push @$stk, $r;
 	}
 }
 print "}\n";
