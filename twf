@@ -1,0 +1,39 @@
+#!/usr/bin/perl -w
+
+# twf : Turn "tree walk format" flat files into groff/dot format
+#
+# Copyright (C) 2020 Charles Suresh <charles.suresh@gmail.com>
+# SPDX-License-Identifier: AGPL-3.0-only
+# Please see the LICENSE file for the Affero GPL 3.0 license details
+
+use strict;
+
+my ($pid,$fid,$f,$m,@c,$l);
+my $ssn=0;
+print "digraph {\n";
+while (<>) {
+	chomp;
+	next if (/^\s*\#.*/);
+	s/\s*\#.*$//;
+	($f,$m,@c)=split(/\|/);
+	#print "$f + $m = ",join(' ', @c), "\n";
+	$fid++;
+	print qq(f$fid [shape=box height=.1 width=.1 "fixed-size"=true label=""];\n);
+	my $x=0;
+	for my $i ($f,$m,@c) {
+		$l=$i;
+		if ($i=~s/\.$//) {
+			$l=$i;
+		}
+		$pid=$ssn;
+		print qq{i$ssn [shape=box label="$l"];\n};
+		$ssn++;
+		if ($x++<2) {
+			#print "i$pid -> f$fid [arrowsize=0.0];\n";
+			print "i$pid -> f$fid;\n";
+		} else {
+			print "f$fid -> i$pid;\n";
+		}
+	}
+}
+print "}\n";
