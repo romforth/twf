@@ -37,6 +37,7 @@ while (<>) {
 			# leaf node: story ends here
 		} else {
 			# more info available
+			$i=~s/\s\([^\)]+\)$//;
 			push @$rem, [$i, $ssn];
 		}
 		if ($find and defined $match and $match eq $i) {
