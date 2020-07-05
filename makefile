@@ -8,7 +8,7 @@ all : abe.pdf
 	evince $<
 %.pdf : %.dot
 	dot -T pdf -o $@ $<
-%.dot : %.twf
+%.dot : %.twf twf
 	./twf $< > $@
 clean:
 	rm -f abe.pdf

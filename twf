@@ -10,7 +10,7 @@ use strict;
 
 my $rem=[];
 my $stk=[];
-my ($pid,$r,$match,$id,$fid,$f,$m,@c,$l,$nopush);
+my ($fam,$acc,$pid,$r,$match,$id,$fid,$f,$m,@c,$l,$nopush);
 my $ssn=0;
 print "digraph {\n";
 while (<>) {
@@ -20,15 +20,16 @@ while (<>) {
 	($f,$m,@c)=split(/\|/);
 	#print "$f + $m = ",join(' ', @c), "\n";
 	$fid++;
-	print qq(f$fid [shape=box height=.1 width=.1 "fixed-size"=true label=""];\n);
+	print qq(f$fid [shape=record,label="{{);
 	my $x=0;
 	my $find=0;
 #print join(" ","stack:",map($_->[0], @$stk)), "\n";;
 	if ($r=pop @$stk) {
-		($match,$id)=@$r;
-#print "Looking for $match $id\n";
+		($match,$fam,$id)=@$r;
+#print "Looking for $match $fam $id\n";
 		$find=1;
 	}
+	$acc="";
 	for my $i ($f,$m,@c) {
 		$nopush=0;
 		$l=$i;
@@ -38,23 +39,39 @@ while (<>) {
 		} else {
 			# more info available
 			$i=~s/\s\([^\)]+\)$//;
-			push @$rem, [$i, $ssn];
+			push @$rem, [$i,$fid,$ssn];
 		}
+		my $skip=0;
 		if ($find and defined $match and $match eq $i) {
 			$pid=$id;
 			$find=0;
+			$skip=1;
 		} else {
 			$pid=$ssn;
-			print qq{i$ssn [shape=box label="$l"];\n};
+			#print qq{i$ssn [shape=box label="$l"];\n};
 			$ssn++;
 		}
 		if ($x++<2) {
 			#print "i$pid -> f$fid [arrowsize=0.0];\n";
-			print "i$pid -> f$fid;\n";
+			#print "i$pid -> f$fid;\n";
+			print "|" if ($x==2);
+			print "<i$pid>$l";
+			print "}" if ($x==2);
+			#$acc.="f$fid:i$pid -> f$fam;\n";
+			if ($skip) {
+				$acc.="f$fam:i$id -> f$fid:i$id;\n";
+			}
 		} else {
-			print "f$fid -> i$pid;\n";
+			if ($skip) {
+				print "|{<i$pid>$l}";
+				$acc.="f$fid:i$pid -> f$fam:i$id;\n";
+			} else {
+				print "|{<i$pid>$l}";
+			}
 		}
 	}
+	print qq(}"];\n);
+	print $acc if ($acc ne '');
 	die "couldn't find $match" if ($find);
 	while ($r=pop @$rem) {
 		push @$stk, $r;
