@@ -10,7 +10,7 @@ use strict;
 
 my $rem=[];
 my $stk=[];
-my ($fam,$acc,$pid,$r,$match,$id,$fid,$f,$m,@c,$l,$nopush);
+my ($fam,$acc,$pid,$r,$match,$id,$fid,$f,$m,@c,$age,$l,$nopush);
 my $ssn=0;
 print "digraph {\n";
 while (<>) {
@@ -31,7 +31,18 @@ while (<>) {
 	}
 	$acc="";
 	for my $i ($f,$m,@c) {
+		$age=0;
 		$nopush=0;
+		if ($i=~s/,\?$//) {
+			# age unknown
+		} elsif ($i=~s/,(\d+)(\?)?$//) {
+			# age known
+			$age=$1;
+			if (defined $2 and $2 eq '?') {
+				# age known but may be incorrect
+				$age.='?'
+			}
+		}
 		$l=$i;
 		if ($nopush or $i=~s/\.$//) {
 			$l=$i;
@@ -41,6 +52,7 @@ while (<>) {
 			$i=~s/\s\([^\)]+\)$//;
 			push @$rem, [$i,$fid,$ssn];
 		}
+		$l.=",$age" if ($age);
 		my $skip=0;
 		if ($find and defined $match and $match eq $i) {
 			$pid=$id;
