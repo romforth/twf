@@ -36,6 +36,9 @@ while (<>) {
 		if ($i eq '?') {
 			# name unknown
 			$nopush=1;
+		} elsif ($i eq '-') {
+			# unknown birth order for remaining children
+			$nopush=1;
 		} elsif ($i=~s/,\?$//) {
 			# age unknown
 		} elsif ($i=~s/,(\d+)(\?)?$//) {

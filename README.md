@@ -7,10 +7,11 @@ a family tree in a more diagrammatic/pictorial form.
 
 An example file (`abe.twf`) shows the input format used by the `twf` script and
 it depicts the relationships documented in the Book of Genesis in the Bible
-starting from Abraham.
+starting from ~~Abraham~~ Adam.
 
 Running `make` in this directory will generate a pdf file which uses `abe.twf`
-as the input file and documents a minimal subset of Abraham's family tree.
+as the input file and documents a ~~minimal~~ long linkage from Adam all the way
+to Abraham's family tree as per the Book of Genesis in the Bible.
 
 An informal grammar that describes the _tree walk format_ using something that
 resembles YACC/Bison (while borrowing some additional functionality such as the
@@ -22,6 +23,7 @@ twf	: ( family '\n' )+	// ... one or more families, listed one per line
 family	: ( person %% '|')+	// a family consists of persons delimited by '|'
 person	: name ( ',' age )? op	// a person has a name and an optional age
 person	: '?'			// a person's name may be unknown
+person	: '-'			// birth order of remaining children is unknown
 age	: '?' | number '?'?	// the age of the person may be unknown ...
 		// ... which is denoted by a '?' or it could be a known number
 		// which may be suffixed with a '?' to denote if it is doubtful
