@@ -21,7 +21,8 @@ resembles YACC/Bison (while borrowing some additional functionality such as the
 twf	: ( family '\n' )+	// ... one or more families, listed one per line
 family	: ( person %% '|')+	// a family consists of persons delimited by '|'
 person	: name ( ',' age )? op	// a person has a name and an optional age
-age	: '?' | number '?'?	'// the age of the person may be unknown ...
+person	: '?'			// a person's name may be unknown
+age	: '?' | number '?'?	// the age of the person may be unknown ...
 		// ... which is denoted by a '?' or it could be a known number
 		// which may be suffixed with a '?' to denote if it is doubtful
 number	: [0-9]+		// age (at time of death) is just a whole number

@@ -33,7 +33,10 @@ while (<>) {
 	for my $i ($f,$m,@c) {
 		$age=0;
 		$nopush=0;
-		if ($i=~s/,\?$//) {
+		if ($i eq '?') {
+			# name unknown
+			$nopush=1;
+		} elsif ($i=~s/,\?$//) {
 			# age unknown
 		} elsif ($i=~s/,(\d+)(\?)?$//) {
 			# age known
