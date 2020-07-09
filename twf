@@ -8,9 +8,16 @@
 
 use strict;
 
+use Getopt::Long;
+my $debug; GetOptions("d" =>\$debug) or usage();
+
+sub usage {
+	die "usage: $0 [-d] file.twf\n";
+}
+
 my $rem=[];
 my $stk=[];
-my ($fam,$acc,$pid,$r,$match,$id,$fid,$f,$m,@c,$age,$l,$nopush);
+my ($back,$fam,$acc,$pid,$r,$match,$id,$fid,$f,$m,@c,$age,$l,$nopush);
 my $ssn=0;
 print "digraph {\n";
 while (<>) {
@@ -23,15 +30,16 @@ while (<>) {
 	print qq(f$fid [shape=record,label="{{);
 	my $x=0;
 	my $find=0;
-#print join(" ","stack:",map($_->[0], @$stk)), "\n";;
+print join(" ","stack:",map($_->[0], @$stk)), "\n" if ($debug);
 	if ($r=pop @$stk) {
 		($match,$fam,$id)=@$r;
-#print "Looking for $match $fam $id\n";
+print "Looking for $match $fam $id\n" if ($debug);
 		$find=1;
 	}
 	$acc="";
 	for my $i ($f,$m,@c) {
 		$age=0;
+		$back=0;
 		$nopush=0;
 		if ($i eq '?') {
 			# name unknown
@@ -41,12 +49,15 @@ while (<>) {
 			$nopush=1;
 		} elsif ($i=~s/,\?$//) {
 			# age unknown
-		} elsif ($i=~s/,(\d+)(\?)?$//) {
+		} elsif ($i=~s/,(\d+)(\?)?(\.)?$//) {
 			# age known
 			$age=$1;
 			if (defined $2 and $2 eq '?') {
 				# age known but may be incorrect
 				$age.='?'
+			}
+			if (defined $3 and $3 eq '.') {
+				$i.=$3;
 			}
 		}
 		$l=$i;
@@ -55,8 +66,13 @@ while (<>) {
 			# leaf node: story ends here
 		} else {
 			# more info available
-			$i=~s/\s\([^\)]+\)$//;
-			push @$rem, [$i,$fid,$ssn];
+			if ($i=~s/\!$//) {
+				# graph not tree, backtrack, remove from history
+				$l=$i;
+				$back=1;
+			}
+			$i=~s/\s+\([^\)]+\)$//;
+			push @$rem, [$i,$fid,$ssn] unless $back;
 		}
 		$l.=",$age" if ($age);
 		my $skip=0;
@@ -64,18 +80,27 @@ while (<>) {
 			$pid=$id;
 			$find=0;
 			$skip=1;
+		} elsif ($back) {
+print "Remove $i from stack\n" if ($debug);
+			for my $k (0..@$stk-1) {
+				my $j=$stk->[$k];
+				if ($j->[0] eq $i) {
+					my ($ign,$ftmp,$id)=@$j;
+					$pid=$id;
+					splice(@$stk,$k,1);
+print "Hack f$fam:i$id -> f$fid:i$id;\n" if ($debug);
+					$acc.="f$fid:i$id -> f$ftmp:i$id;\n";
+					last;
+				}
+			}
 		} else {
 			$pid=$ssn;
-			#print qq{i$ssn [shape=box label="$l"];\n};
 			$ssn++;
 		}
 		if ($x++<2) {
-			#print "i$pid -> f$fid [arrowsize=0.0];\n";
-			#print "i$pid -> f$fid;\n";
 			print "|" if ($x==2);
 			print "<i$pid>$l";
 			print "}" if ($x==2);
-			#$acc.="f$fid:i$pid -> f$fam;\n";
 			if ($skip) {
 				$acc.="f$fam:i$id -> f$fid:i$id;\n";
 			}
