@@ -22,8 +22,10 @@ Serug,230.|?|Nahor|-|Other.|Sons.|And.|Daughters.
 Nahor,148.|?|Terah|-|Other.|Sons.|And.|Daughters.
 Terah,205.|?|Abraham (Abram)|Nahor|Haran
 # Abraham was previously known as Abram
-Abraham,175.|Sarah,127.|Isaac,180	# Abraham and Sarah have 1 son Isaac
+Abraham,175|Sarah,127.|Isaac,180	# Abraham and Sarah have 1 son Isaac
 # According to Genesis, they were 175, 127 and 180 years (!) old when they died
+Abraham|Hagar.|Ishmael.			# Genesis 16:1
+Abraham.|Keturah.|Zimran.|Jokshan.|Medan.|Midian.|Ishbak.|Shuah. # Genesis 25:1
 Isaac.|Rebekah|Esau.|Jacob.	# Isaac is now married with children
 Bethuel|?|Rebekah.		# Rebekah's mother's name is not known
 Nahor!|Micah.|Bethuel.		# but we know both of her paternal grandparents
