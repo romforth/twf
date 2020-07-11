@@ -20,10 +20,14 @@ Peleg,239.|?|Reu|-|Other.|Sons.|And.|Daughters.
 Reu,239.|?|Serug|-|Other.|Sons.|And.|Daughters.
 Serug,230.|?|Nahor|-|Other.|Sons.|And.|Daughters.
 Nahor,148.|?|Terah|-|Other.|Sons.|And.|Daughters.
-Terah.|?|Abraham (Abram)|Nahor|Haran.
+Terah,205.|?|Abraham (Abram)|Nahor|Haran
 # Abraham was previously known as Abram
 Abraham,175.|Sarah,127.|Isaac,180	# Abraham and Sarah have 1 son Isaac
 # According to Genesis, they were 175, 127 and 180 years (!) old when they died
 Isaac.|Rebekah|Esau.|Jacob.	# Isaac is now married with children
 Bethuel|?|Rebekah.		# Rebekah's mother's name is not known
 Nahor!|Micah.|Bethuel.		# but we know both of her paternal grandparents
+Haran.|?|Lot			# Genesis 11:27
+Lot|?|Daughter1^|Daughter2^	# Genesis 19:30
+Lot|Daughter1!|Moab.		# Genesis 19:37
+Lot.|Daughter2!|Ben-Ammi.	# Genesis 19:38

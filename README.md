@@ -32,8 +32,10 @@ name	: realname ( \s '(' nickname ')' )?	// a person may have a different
 				// optional earlier name and/or a nickname
 realname: [^\,\(\#\|]+		// names can have anything including spaces ...
 nickname: [^\,\(\#\|\)]+	// .. except some special characters
-op	: [\.\!]?		// the '.' operator denotes no descendants
+op	: [\.\!\^]?		// the '.' operator denotes no descendants
 				// a cut/'!' operator indicates a back reference
+				// a forward pointer/'^' operator indicates that
+				// the person is resolved later, not immediately
 ```
 
 Note that while doing genealogy research, the age of the deceased may be
@@ -48,6 +50,12 @@ reference in the tree. The cut/'!' operator resolves the looping that can thus
 result from this, and yes, the cut/'!' operator is "borrowed" from Prolog
 although there is no backtracking involved here so it is not used in quite the
 same sense as it is used in Prolog.
+
+In some cases, relationships can be complicated enough (for example, see Lot's
+family tree) that the cut /'!' operator needs a paired forward pointer/'^'
+reference operator as well. This operator just postpones the lookup of the
+person in the immediately following family entry and defers it until a later
+cut/'!' operator resolves it in the stack.
 
 Turning the `twf` format into the more well known `GEDCOM` format is left as
 an exercise for the reader. The primary (only?) advantage of `twf` over `GEDCOM`

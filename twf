@@ -41,6 +41,7 @@ print "Looking for $match $fam $id\n" if ($debug);
 		$age=0;
 		$back=0;
 		$nopush=0;
+		next unless defined($i);
 		if ($i eq '?') {
 			# name unknown
 			$nopush=1;
@@ -71,11 +72,21 @@ print "Looking for $match $fam $id\n" if ($debug);
 				$l=$i;
 				$back=1;
 			}
-			$i=~s/\s+\([^\)]+\)$//;
-			push @$rem, [$i,$fid,$ssn] unless $back;
+			if ($i=~s/\^$//) {
+				$l=$i; # forward reference
+				unshift @$stk, [$i,$fid,$ssn];
+			} else {
+				$i=~s/\s+\([^\)]+\)$//;
+				if ($find and defined $match and $match eq $i) {
+					push @$rem, [$i,$fam,$id] unless $back;
+				} else {
+					push @$rem, [$i,$fid,$ssn] unless $back;
+				}
+			}
 		}
 		$l.=",$age" if ($age);
 		my $skip=0;
+		my $parent=($x++<2);
 		if ($find and defined $match and $match eq $i) {
 			$pid=$id;
 			$find=0;
@@ -88,8 +99,12 @@ print "Remove $i from stack\n" if ($debug);
 					my ($ign,$ftmp,$id)=@$j;
 					$pid=$id;
 					splice(@$stk,$k,1);
-print "Hack f$fam:i$id -> f$fid:i$id;\n" if ($debug);
-					$acc.="f$fid:i$id -> f$ftmp:i$id;\n";
+print "Hack1 f$fid:i$id -> f$ftmp:i$id;\n" if ($debug);
+					if ($parent) {
+						$acc.="f$ftmp:i$id -> f$fid:i$id;\n";
+					} else {
+						$acc.="f$fid:i$id -> f$ftmp:i$id;\n";
+					}
 					last;
 				}
 			}
@@ -97,7 +112,7 @@ print "Hack f$fam:i$id -> f$fid:i$id;\n" if ($debug);
 			$pid=$ssn;
 			$ssn++;
 		}
-		if ($x++<2) {
+		if ($parent) {
 			print "|" if ($x==2);
 			print "<i$pid>$l";
 			print "}" if ($x==2);
