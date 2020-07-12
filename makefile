@@ -4,11 +4,11 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Please see the LICENSE file for the Affero GPL 3.0 license details
 
-all : abe.pdf
+all : adam.pdf abe.pdf
 	evince $<
 %.pdf : %.dot
 	dot -T pdf -o $@ $<
 %.dot : %.twf twf
 	./twf $< > $@
 clean:
-	rm -f abe.pdf
+	rm -f abe.pdf adam.pdf

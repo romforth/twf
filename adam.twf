@@ -1,0 +1,30 @@
+# Rewind genealogy research all the way to Adam : from Genesis 5:3
+Adam,930.|Eve.|Cain.|Abel.|Seth|-|Other.|Sons.|And.|Daughters.
+# the - denotes that birth order of remaining children may be unknown/incorrect
+Seth,912.|?|Enosh|-|Other.|Sons.|And.|Daughters.
+Enosh,905.|?|Kenan|-|Other.|Sons.|And.|Daughters.
+Kenan,910.|?|Mahalalel|-|Other.|Sons.|And.|Daughters.
+Mahalalel,895.|?|Jared|-|Other.|Sons.|And.|Daughters.
+Jared,962.|?|Enoch|-|Other.|Sons.|And.|Daughters.
+Enoch,365?.|?|Methuselah|-|Other.|Sons.|And.|Daughters.
+Methuselah,969.|?|Lamech|-|Other.|Sons.|And.|Daughters.
+Lamech,777.|?|Noah|-|Other.|Sons.|And.|Daughters.
+# Although Genesis 9:18 lists Noah's sons as Shem, Ham and Japheth ...
+Noah,950.|?|Shem|Japheth.|Ham.	# Ham was the youngest as per Genesis 9:24
+# We continue with Shem -> Abram's descendants as per Genesis 11:10
+Shem,600.|?|Arphaxad|-|Other.|Sons.|And.|Daughters.
+Arphaxad,438.|?|Shelah|-|Other.|Sons.|And.|Daughters.
+Shelah,433.|?|Eber|-|Other.|Sons.|And.|Daughters.
+Eber,464.|?|Peleg|-|Other.|Sons.|And.|Daughters.
+Peleg,239.|?|Reu|-|Other.|Sons.|And.|Daughters.
+Reu,239.|?|Serug|-|Other.|Sons.|And.|Daughters.
+Serug,230.|?|Nahor|-|Other.|Sons.|And.|Daughters.
+Nahor,148.|?|Terah|-|Other.|Sons.|And.|Daughters.
+Terah,205.|?|Abraham (Abram)|Nahor|Haran # Abraham was previously known as Abram
+
+include abe.twf
+
+Haran.|?|Lot			# Genesis 11:27
+Lot|?|Daughter1^|Daughter2^	# Genesis 19:30
+Lot|Daughter1!|Moab.		# Genesis 19:37
+Lot.|Daughter2!|Ben-Ammi.	# Genesis 19:38

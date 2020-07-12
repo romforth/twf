@@ -19,10 +19,10 @@ my $rem=[];
 my $stk=[];
 my ($back,$fam,$acc,$pid,$r,$match,$id,$fid,$f,$m,@c,$age,$l,$nopush);
 my $ssn=0;
-print "digraph {\n";
-while (<>) {
+sub process_rest {
 	chomp;
-	next if (/^\s*\#.*/);
+	return if (/^\s*$/);
+	return if (/^\s*\#.*/);
 	s/\s*\#.*$//;
 	($f,$m,@c)=split(/\|/);
 	#print "$f + $m = ",join(' ', @c), "\n";
@@ -30,7 +30,7 @@ while (<>) {
 	print qq(f$fid [shape=record,label="{{);
 	my $x=0;
 	my $find=0;
-print join(" ","stack:",map($_->[0], @$stk)), "\n" if ($debug);
+print join(", ","stack:",map($_->[0], @$stk)), "\n" if ($debug);
 	if ($r=pop @$stk) {
 		($match,$fam,$id)=@$r;
 print "Looking for $match $fam $id\n" if ($debug);
@@ -55,7 +55,7 @@ print "Looking for $match $fam $id\n" if ($debug);
 			$age=$1;
 			if (defined $2 and $2 eq '?') {
 				# age known but may be incorrect
-				$age.='?'
+				$age.=$2;
 			}
 			if (defined $3 and $3 eq '.') {
 				$i.=$3;
@@ -134,5 +134,25 @@ print "Hack1 f$fid:i$id -> f$ftmp:i$id;\n" if ($debug);
 	while ($r=pop @$rem) {
 		push @$stk, $r;
 	}
+}
+sub readfile {
+	my ($f)=@_;
+	my $stdin;
+	open($stdin,$f) or die "can't open $f";
+	while (<$stdin>) {
+		process();
+	}
+	close($stdin);
+}
+sub process {
+	if (/^include (.*)/) {
+		readfile($1);
+	} else {
+		process_rest();
+	}
+}
+print "digraph {\n";
+while (<>) {
+	process();
 }
 print "}\n";
