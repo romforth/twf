@@ -61,3 +61,6 @@ cut/'!' operator resolves it in the stack.
 Turning the `twf` format into the more well known `GEDCOM` format is left as
 an exercise for the reader. The primary (only?) advantage of `twf` over `GEDCOM`
 is that it is meant to be hand editable using any text editor of your choice.
+
+Some background and context regarding the creation of this file format is at:
+https://ces.mataroa.blog/blog/twf_ftwmd
